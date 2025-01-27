@@ -1,7 +1,6 @@
 package com.alex.logistics.logistics_management.repository;
 
-import com.alex.logistics.model.ShipmentRequest;
-import com.alex.logistics.repository.ShipmentRequestRepository;
+import com.alex.logistics.logistics_management.model.ShipmentRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -1,4 +1,4 @@
-package com.alex.logistics.config;
+package com.alex.logistics.logistics_management.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

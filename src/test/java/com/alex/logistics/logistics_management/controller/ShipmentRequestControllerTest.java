@@ -1,7 +1,7 @@
 package com.alex.logistics.logistics_management.controller;
 
 import com.alex.logistics.logistics_management.TestConfig;
-import com.alex.logistics.model.ShipmentRequest;
+import com.alex.logistics.logistics_management.model.ShipmentRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

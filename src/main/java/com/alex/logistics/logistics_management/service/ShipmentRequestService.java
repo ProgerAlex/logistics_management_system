@@ -1,7 +1,7 @@
-package com.alex.logistics.service;
+package com.alex.logistics.logistics_management.service;
 
-import com.alex.logistics.model.ShipmentRequest;
-import com.alex.logistics.repository.ShipmentRequestRepository;
+import com.alex.logistics.logistics_management.model.ShipmentRequest;
+import com.alex.logistics.logistics_management.repository.ShipmentRequestRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.alex.logistics.model;
+package com.alex.logistics.logistics_management.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

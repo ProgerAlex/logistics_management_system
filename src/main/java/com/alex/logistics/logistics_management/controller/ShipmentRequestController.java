@@ -1,7 +1,7 @@
-package com.alex.logistics.controller;
+package com.alex.logistics.logistics_management.controller;
 
-import com.alex.logistics.model.ShipmentRequest;
-import com.alex.logistics.service.ShipmentRequestService;
+import com.alex.logistics.logistics_management.model.ShipmentRequest;
+import com.alex.logistics.logistics_management.service.ShipmentRequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
