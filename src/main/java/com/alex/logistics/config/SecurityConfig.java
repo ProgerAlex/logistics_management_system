@@ -17,17 +17,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Отключаем CSRF защиту, если необходимо
+                .csrf(AbstractHttpConfigurer::disable) // Отключаем CSRF защиту, если она не нужна
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/shipments").permitAll() // Разрешаем доступ к /api/shipments
-                        .anyRequest().authenticated() // Требуем аутентификацию для остальных запросов
+                        // Разрешаем доступ к API /shipments
+                        .requestMatchers("/api/shipments/**").permitAll()//.authenticated()
+                        // Все остальные запросы требуют аутентификации
+                        .anyRequest().authenticated()
                 )
-                .formLogin(form -> form
-                        .loginPage("/login") // Настройка страницы входа, если нужно
-                        .permitAll() // Разрешаем доступ к странице входа всем
-                )
-                .logout(LogoutConfigurer::permitAll); // Разрешаем доступ к логауту всем
-
+//               .formLogin(form -> form
+//                        .loginPage("/login") // Страница логина
+//                        .permitAll() // Разрешаем доступ к странице логина всем
+//               )
+                .logout(LogoutConfigurer::permitAll // Разрешаем доступ к логауту всем
+                );
 
         return http.build();
     }
