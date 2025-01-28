@@ -1,7 +1,5 @@
 package com.alex.logistics.logistics_management.controller;
 
-import com.alex.logistics.logistics_management.config.SecurityConfig;
-import com.alex.logistics.logistics_management.dto.RegistrationDto;
 import com.alex.logistics.logistics_management.model.Role;
 import com.alex.logistics.logistics_management.model.User;
 import com.alex.logistics.logistics_management.service.UserService;
