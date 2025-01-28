@@ -1,5 +1,6 @@
 package com.alex.logistics.logistics_management.service;
 
+import com.alex.logistics.logistics_management.dto.RegistrationDto;
 import com.alex.logistics.logistics_management.model.Role;
 import com.alex.logistics.logistics_management.model.User;
 import com.alex.logistics.logistics_management.repository.UserRepository;
@@ -30,11 +31,11 @@ public class UserService {
     public void deleteUser(Long id) {userRepository.deleteById(id);}
 
     @Transactional
-    public User registerUser(User user) {
+    public User registerUser(RegistrationDto userInfo) {
         User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setEmail(user.getEmail());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setUsername(userInfo.getUsername());
+        newUser.setEmail(userInfo.getEmail());
+        newUser.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         newUser.setRoles(Set.of(Role.USER));
         return userRepository.save(newUser);
     }

@@ -1,5 +1,6 @@
 package com.alex.logistics.logistics_management.controller;
 
+import com.alex.logistics.logistics_management.dto.RegistrationDto;
 import com.alex.logistics.logistics_management.model.User;
 import com.alex.logistics.logistics_management.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        return ResponseEntity.ok(userService.registerUser(user));
+    public ResponseEntity<User> register(@RequestBody RegistrationDto userInfo) {
+        return ResponseEntity.ok(userService.registerUser(userInfo));
     }
 }

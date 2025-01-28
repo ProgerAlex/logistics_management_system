@@ -1,5 +1,6 @@
 package com.alex.logistics.logistics_management.controller;
 
+import com.alex.logistics.logistics_management.dto.RegistrationDto;
 import com.alex.logistics.logistics_management.model.Role;
 import com.alex.logistics.logistics_management.model.User;
 import com.alex.logistics.logistics_management.service.UserService;
@@ -38,14 +39,18 @@ class AuthControllerTest {
 
     @Test
     void testRegistration() throws Exception {
-        // Arrange
+        //Arrange
         String name = "testUser";
+        String inputEmail = "email233";
+
         String inputPassword = "password123";
         String encodedPassword = "encodedPassword";
 
-        User inputUser = new User();
-        inputUser.setUsername(name);
-        inputUser.setPassword(inputPassword);
+        RegistrationDto inputDto = new RegistrationDto();
+        inputDto.setUsername(inputPassword);
+        inputDto.setEmail(inputEmail);
+        inputDto.setPassword(encodedPassword);
+
 
         User createdUser = new User();
         createdUser.setId(1L);
@@ -54,17 +59,17 @@ class AuthControllerTest {
         createdUser.setRoles(Set.of(Role.USER));
 
 
-        when(userService.registerUser(any(User.class))).thenReturn(createdUser);
+        when(userService.registerUser(any(RegistrationDto.class))).thenReturn(createdUser);
 
         // Act
         // Assert
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(inputUser)))
+                        .content(objectMapper.writeValueAsString(inputDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(createdUser)));
 
-        verify(userService).registerUser(any(User.class));
+        verify(userService).registerUser(any(RegistrationDto.class));
     }
 
     @TestConfiguration

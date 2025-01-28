@@ -1,5 +1,6 @@
 package com.alex.logistics.logistics_management.service;
 
+import com.alex.logistics.logistics_management.dto.RegistrationDto;
 import com.alex.logistics.logistics_management.model.Role;
 import com.alex.logistics.logistics_management.model.User;
 import com.alex.logistics.logistics_management.repository.UserRepository;
@@ -69,11 +70,16 @@ public class UserServiceTest {
     @Test
     public void testRegisterUser() {
         // Arrange
+        RegistrationDto inputDto = new RegistrationDto();
+        inputDto.setUsername(inputUser.getUsername());
+        inputDto.setEmail(inputUser.getEmail());
+        inputDto.setPassword(inputUser.getPassword());
+
         when(encoder.encode(inputUser.getPassword())).thenReturn(updatedUser.getPassword());
         when(repository.save(any(User.class))).thenReturn(updatedUser);
 
         // Act
-        User result = service.registerUser(inputUser);
+        User result = service.registerUser(inputDto);
 
         // Assert
         assertNotNull(result);
