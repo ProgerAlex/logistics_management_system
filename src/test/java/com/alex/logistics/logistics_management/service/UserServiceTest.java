@@ -33,87 +33,107 @@ public class UserServiceTest {
 
     private UserService service;
 
-    private User user;
+    private User inputUser;
+    private User updatedUser;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);  // Инициализация моков
-        service = new UserService(repository,encoder);// Передача мока в сервис
+        MockitoAnnotations.openMocks(this);
+        service = new UserService(repository,encoder);
 
-        // Инициализация тестовых данных
+        // initialization test data
+        Long id = 1L;
         String name = "Josh";
-        String password = "12345";
-        Set<Role> roles = new HashSet<>();
+        String email = "josh@gmail.com";
 
-        // Arrange
-        user = new User();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setRoles(roles);
+        String password = "12345";
+        String encodedPassword = "encodedPassword";
+
+        Set<Role> inputRoles = new HashSet<>();
+        Set<Role> updatedRoles = new HashSet<>(List.of(Role.USER));
+
+        inputUser = new User();
+        inputUser.setUsername(name);
+        inputUser.setEmail(email);
+        inputUser.setPassword(password);
+        inputUser.setRoles(inputRoles);
+
+        updatedUser = new User();
+        updatedUser.setId(id);
+        updatedUser.setEmail(email);
+        updatedUser.setUsername(name);
+        updatedUser.setPassword(encodedPassword);
+        updatedUser.setRoles(updatedRoles);
     }
 
     @Test
     public void testRegisterUser() {
         // Arrange
-        String passwordEncoded = "54321";
-        when(encoder.encode(user.getPassword())).thenReturn(passwordEncoded);
-
-        User newUser = new User();
-        newUser.setId(1L);
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(passwordEncoded);
-        newUser.setRoles(new HashSet<>(List.of(Role.USER)));
-
-        when(repository.save(any(User.class))).thenReturn(newUser);
+        when(encoder.encode(inputUser.getPassword())).thenReturn(updatedUser.getPassword());
+        when(repository.save(any(User.class))).thenReturn(updatedUser);
 
         // Act
-        User result = service.registerUser(user);
+        User result = service.registerUser(inputUser);
 
         // Assert
         assertNotNull(result);
-        assertEquals(newUser.getId(), result.getId());
-        assertEquals(newUser.getUsername(), result.getUsername());
-        assertEquals(newUser.getPassword(), result.getPassword());
-        assertEquals(newUser.getRoles(), result.getRoles());
+        assertEquals(updatedUser.getId(), result.getId());
+        assertEquals(updatedUser.getEmail(), result.getEmail());
+        assertEquals(updatedUser.getUsername(), result.getUsername());
+        assertEquals(updatedUser.getPassword(), result.getPassword());
+        assertEquals(updatedUser.getRoles(), result.getRoles());
 
-        verify(encoder, times(1)).encode(user.getPassword());
+        verify(encoder, times(1)).encode(inputUser.getPassword());
         verify(repository, times(1)).save(any(User.class));
     }
 
     @Test
     public void testFindById() {
         // Arrange
-        User newUser = new User();
-        newUser.setId(1L);
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword("54321");
-        newUser.setRoles(new HashSet<>(List.of(Role.USER)));
-
-        when(repository.findById(1L)).thenReturn(Optional.of(newUser));
+        when(repository.findById(updatedUser.getId())).thenReturn(Optional.of(updatedUser));
 
         // Act
-        Optional<User> result = service.findById(1L);
+        Optional<User> result = service.findById(updatedUser.getId());
 
         // Assert
         assertTrue(result.isPresent());
-        assertEquals(newUser.getId(), result.get().getId());
-        assertEquals(newUser.getUsername(), result.get().getUsername());
-        assertEquals(newUser.getPassword(), result.get().getPassword());
+        assertEquals(updatedUser.getId(), result.get().getId());
+        assertEquals(updatedUser.getEmail(), result.get().getEmail());
+        assertEquals(updatedUser.getUsername(), result.get().getUsername());
+        assertEquals(updatedUser.getPassword(), result.get().getPassword());
 
-        verify(repository, times(1)).findById(1L);
+        verify(repository, times(1)).findById(updatedUser.getId());
+    }
+
+    @Test
+    public void testFindByEmail() {
+        // Arrange
+        when(repository.findByEmail(inputUser.getEmail())).thenReturn(Optional.of(updatedUser));
+
+        // Act
+        Optional<User> result = service.findByEmail(inputUser.getEmail());
+
+        // Assert
+        assertTrue(result.isPresent());
+        assertEquals(updatedUser.getId(), result.get().getId());
+        assertEquals(updatedUser.getEmail(), result.get().getEmail());
+        assertEquals(updatedUser.getUsername(), result.get().getUsername());
+        assertEquals(updatedUser.getPassword(), result.get().getPassword());
+
+        verify(repository, times(1)).findByEmail(updatedUser.getEmail());
     }
 
 
     @Test
     public void testDeleteUser() {
         // Arrange
-        doNothing().when(repository).deleteById(1L);
+        doNothing().when(repository).deleteById(updatedUser.getId());
 
         // Act
-        service.deleteUser(1L);
+        service.deleteUser(updatedUser.getId());
 
         // Assert
-        verify(repository, times(1)).deleteById(1L);
+        verify(repository, times(1)).deleteById(updatedUser.getId());
     }
 
     @TestConfiguration

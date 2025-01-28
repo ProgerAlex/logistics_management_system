@@ -15,10 +15,27 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-public class UserRepositoryTest {
+class UserRepositoryTest {
 
     @Autowired
     private UserRepository repository;
+
+    private User user;
+
+    @BeforeEach
+    public void setUp(){
+        String name = "Josh";
+        String password = "12345";
+        String email = "hello@gmail.com";
+        Set<Role> roles = new HashSet<>(List.of(Role.USER));
+
+        // Arrange
+        user = new User();
+        user.setUsername(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setRoles(roles);
+    }
 
     @BeforeEach
     public void deleteData(){
@@ -27,26 +44,15 @@ public class UserRepositoryTest {
 
     @Test
     public void testSaveUser() {
-
-        String name = "Josh";
-        String password = "12345";
-        Set<Role> roles = new HashSet<>(List.of(Role.USER));
-
-        // Arrange
-        User user = new User();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setRoles(roles);
-
         // Act
         User savedUser = repository.save(user);
 
         // Assert
         assertThat(savedUser).isNotNull();
         assertThat(savedUser.getId()).isNotNull();
-        assertThat(savedUser.getUsername()).isEqualTo(name);
-        assertThat(savedUser.getPassword()).isEqualTo(password);
-        assertThat(savedUser.getRoles()).isEqualTo(roles);
+        assertThat(savedUser.getUsername()).isEqualTo(user.getUsername());
+        assertThat(savedUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(savedUser.getRoles()).isEqualTo(user.getRoles());
 
         assertThat(repository.findById(savedUser.getId()).isPresent()).isEqualTo(true);
         assertThat(repository.findById(savedUser.getId()).get()).isEqualTo(savedUser);
@@ -54,17 +60,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindUserById() {
-        String name = "Josh";
-        String password = "12345";
-        Set<Role> roles = new HashSet<>(List.of(Role.USER));
-
-        // Arrange
-        User user = new User();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setRoles(roles);
-
-        // Act
+        //Arrange
         User savedUser = repository.save(user);
 
         // Act
@@ -72,24 +68,15 @@ public class UserRepositoryTest {
 
         // Assert
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getUsername()).isEqualTo(name);
-        assertThat(foundUser.getPassword()).isEqualTo(password);
-        assertThat(foundUser.getRoles()).isEqualTo(roles);
+        assertThat(foundUser.getId()).isNotNull();
+        assertThat(foundUser.getUsername()).isEqualTo(user.getUsername());
+        assertThat(foundUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(foundUser.getRoles()).isEqualTo(user.getRoles());
     }
 
     @Test
     public void testFindUserByUsername() {
-        String name = "Josh";
-        String password = "12345";
-        Set<Role> roles = new HashSet<>(List.of(Role.USER));
-
-        // Arrange
-        User user = new User();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setRoles(roles);
-
-        // Act
+        //Arrange
         User savedUser = repository.save(user);
 
         // Act
@@ -97,22 +84,32 @@ public class UserRepositoryTest {
 
         // Assert
         assertThat(foundUser).isNotNull();
-        assertThat(foundUser.getUsername()).isEqualTo(name);
-        assertThat(foundUser.getPassword()).isEqualTo(password);
-        assertThat(foundUser.getRoles()).isEqualTo(roles);
+        assertThat(foundUser.getId()).isNotNull();
+        assertThat(foundUser.getUsername()).isEqualTo(user.getUsername());
+        assertThat(foundUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(foundUser.getRoles()).isEqualTo(user.getRoles());
     }
 
     @Test
-    public void testDeleteUser() {
-        String name = "Josh";
-        String password = "12345";
-        Set<Role> roles = new HashSet<>(List.of(Role.USER));
+    public void testFindUserByEmail() {
+        //Arrange
+        User savedUser = repository.save(user);
 
-        // Arrange
-        User user = new User();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setRoles(roles);
+        // Act
+        User foundUser = repository.findByEmail(savedUser.getEmail()).orElse(null);
+
+        // Assert
+        assertThat(foundUser).isNotNull();
+        assertThat(foundUser.getId()).isNotNull();
+        assertThat(foundUser.getUsername()).isEqualTo(user.getUsername());
+        assertThat(foundUser.getPassword()).isEqualTo(user.getPassword());
+        assertThat(foundUser.getRoles()).isEqualTo(user.getRoles());
+    }
+
+
+    @Test
+    public void testDeleteUser() {
+        //Arrange
         User savedUser = repository.save(user);
 
         // Act
@@ -125,17 +122,8 @@ public class UserRepositoryTest {
 
     @Test
     public void testUpdateUser() {
-        String name = "Josh";
-        String password = "12345";
-        Set<Role> roles = new HashSet<>(List.of(Role.USER));
-
+        //Arrange
         String updatedPassword = "qwerty";
-
-        // Arrange
-        User user = new User();
-        user.setUsername(name);
-        user.setPassword(password);
-        user.setRoles(roles);
         User savedUser = repository.save(user);
 
         // Act

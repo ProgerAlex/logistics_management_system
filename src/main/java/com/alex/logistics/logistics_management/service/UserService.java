@@ -21,9 +21,10 @@ public class UserService {
     }
 
     @Transactional
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
+    public Optional<User> findById(Long id) {return userRepository.findById(id);}
+
+    @Transactional
+    public Optional<User> findByEmail(String email) {return userRepository.findByEmail(email);}
 
     @Transactional
     public void deleteUser(Long id) {userRepository.deleteById(id);}
@@ -32,6 +33,7 @@ public class UserService {
     public User registerUser(User user) {
         User newUser = new User();
         newUser.setUsername(user.getUsername());
+        newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
         newUser.setRoles(Set.of(Role.USER));
         return userRepository.save(newUser);
